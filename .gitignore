@@ -6,6 +6,8 @@ __pycache__/
 build/
 downloads/
 *.log
+*.csv
+*.ipynb
 
 # Jupyter Notebook
 .ipynb_checkpoints
