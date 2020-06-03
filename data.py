@@ -1,4 +1,6 @@
-# Standard import
+#!/usr/bin/env python 
+#-*- coding: utf-8 -*-
+# Standard import {{{
 import csv
 import os
 import json
@@ -8,8 +10,7 @@ import itertools
 
 # Third-party import
 from pydantic import BaseModel, Field, validator
-
-csvfile = os.listdir('./dataset')[1]
+# }}}
 
 
 class Sample(BaseModel):
@@ -85,7 +86,3 @@ def get_chunk_sample(fname, chunksize=1000):
         except StopIteration:
             return
         yield itertools.chain((first,), chunk_it)
-
-
-for i in get_chunk_sample(F'dataset/{csvfile}'):
-    print(len(list(i)))
