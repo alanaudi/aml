@@ -1,15 +1,16 @@
 #!/usr/bin/env python 
 #-*- coding: utf-8 -*-
 # Standard import {{{
-import csv
-import os
-import json
 import ast
-from typing import List, Optional, Iterator
+import csv
 import itertools
+import json
+import os
+from typing import Iterator, List, Optional
 
 # Third-party import
 from pydantic import BaseModel, Field, validator
+
 # }}}
 
 
