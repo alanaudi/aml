@@ -17,19 +17,19 @@
 # Download
 <details>
     <summary>Slack Workspace</summary>
-
+    <br/>
     <span><a href="https://esunaiopencompetition.slack.com/join/shared_invite/zt-ed3evsfq-o3IUFB80duxGjshACB~t_A#/">Link</a></span>
 </details>
 <details>
     <summary>模型訓練資料_0603</summary>
     <span><a href="">資料集說明</a></span>
-
+    <br/>
     <span><a href="https://hackmd.io/@nqf_7suCTA2B-tYY2TvmYw/r11xDuMoL">tbrain_train_final_0603.csv</a></span>
 </details>
 <details>
     <summary>API 教學內容</summary>
     <span><a href="https://hackmd.io/@UcQg6jwlT_WL_ZNkPZMm6Q/BJfELe_c8">API 開發說明文件</a></span>
-
+    <br/>
     <span><a href="https://hackmd.io/@nqf_7suCTA2B-tYY2TvmYw/r11xDuMoL">API 規格說明文件</a></span>
 </details>
 
