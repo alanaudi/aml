@@ -18,7 +18,7 @@
 <details>
     <summary>Slack Workspace</summary>
 
-    [Link](https://esunaiopencompetition.slack.com/join/shared_invite/zt-ed3evsfq-o3IUFB80duxGjshACB~t_A#/)
+    <a href="https://esunaiopencompetition.slack.com/join/shared_invite/zt-ed3evsfq-o3IUFB80duxGjshACB~t_A#/"> Link </a>
 </details>
 <details>
     <summary>模型訓練資料_0603</summary>
