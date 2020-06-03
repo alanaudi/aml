@@ -6,6 +6,7 @@ import csv
 import itertools
 import json
 import os
+import re
 from typing import Iterator, List, Optional
 
 # Third-party import
@@ -25,6 +26,10 @@ class Sample(BaseModel):
     hyperlink: str
     content: str
     name: Optional[List[str]]
+
+    @property
+    def source(cls):
+        return re.search(r'https?://.*?/', cls.hyperlink).group()
 
     @validator('news_ID')
     def str2int(cls, s):
