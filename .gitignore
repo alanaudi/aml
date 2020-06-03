@@ -14,3 +14,6 @@ downloads/
 
 # Environments
 .venv
+
+# OS cache
+.DS_Store
