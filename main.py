@@ -13,7 +13,7 @@ csvfile = os.listdir('./dataset')[1]
 
 
 class Sample(BaseModel):
-    """Sample model
+    """ Sample model
 
     Each sample:
         "01", "http://xxx.xxx", "xxx", "['foo', 'bar']"
@@ -30,12 +30,13 @@ class Sample(BaseModel):
 
     @validator('name', pre=True)
     def str2list(cls, s):
-        """Convert string representation of list to list of string
+        """ Convert string representation of list to list of string
 
         Args:
-            s (str): intput string -> "['a', 'b', 'c']"
+            s (str): "['foo', 'bar']"
+
         Return:
-            (List[str]): ['foo', 'bar']
+            List[str]: ['foo', 'bar']
         """
         return ast.literal_eval(s)
 
@@ -74,7 +75,9 @@ def get_chunk_sample(fname, chunksize=1000):
         1000
         23
     """
+
     it = iter(get_sample(fname))
+
     while True:
         chunk_it = itertools.islice(it, chunksize)
         try:
