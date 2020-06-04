@@ -31,10 +31,13 @@ class Sample(BaseModel):
 
     @property
     def source(self):
+        return PATTERN.sub(lambda m: REP[re.escape(m.group(0))], self.host).strip('.')
+
+    @property
+    def host(self):
         host = re.search(r'https?://.*?/', self.hyperlink).group()
         host = re.findall(r'.*\/(.*)\/', host)[0]
-        return PATTERN.sub(lambda m: REP[re.escape(m.group(0))], host)
-
+        return host
 
     @validator('news_ID')
     def str2int(cls, s):
