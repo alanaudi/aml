@@ -53,6 +53,8 @@ class Sample(BaseModel):
         Return:
             List[str]: ['foo', 'bar']
         """
+        if not isinstance(s, str):
+            raise ValueError('Name list format should be: \'["a", "b", ...]\'')
         return ast.literal_eval(s)
 
 
