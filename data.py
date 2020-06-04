@@ -56,7 +56,7 @@ class Sample(BaseModel):
         return ast.literal_eval(s)
 
 
-def get_sample(fname: str) -> Iterator[str]:
+def get_sample(fname: str) -> Sample:
     """ Preprocess each row to Sample
 
     Args:
@@ -70,7 +70,7 @@ def get_sample(fname: str) -> Iterator[str]:
             yield Sample(**row)
 
 
-def get_chunk_sample(fname, chunksize=1000):
+def get_chunk_sample(fname, chunksize=1000) -> Sample:
     """ Get a chunk of samples
 
     Args:
