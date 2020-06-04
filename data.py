@@ -12,6 +12,10 @@ from pydantic import BaseModel, validator
 
 # }}}
 
+REPLACEMENT = ['www', 'com', 'tw', 'mg', 'gov', 'net', 'org', 'm', 'hk', 'news']
+PATTERN = re.compile('|'.join([r'\b%s\b' % s for s in REPLACEMENT]))
+REP = {k:'' for k in REPLACEMENT}
+
 
 class Sample(BaseModel):
     """ Sample model
@@ -27,7 +31,10 @@ class Sample(BaseModel):
 
     @property
     def source(self):
-        return re.search(r'https?://.*?/', self.hyperlink).group()
+        host = re.search(r'https?://.*?/', self.hyperlink).group()
+        host = re.findall(r'.*\/(.*)\/', host)[0]
+        return PATTERN.sub(lambda m: REP[re.escape(m.group(0))], host)
+
 
     @validator('news_ID')
     def str2int(cls, s):
@@ -53,7 +60,7 @@ def get_sample(fname: str) -> Iterator[str]:
         filename (str): dataset/tbrain_train_final_0603.csv
 
     Yield:
-        Sample
+        data.Sample
     """
     with open(fname, newline='') as f:
         for row in csv.DictReader(f):
@@ -68,17 +75,14 @@ def get_chunk_sample(fname, chunksize=1000):
         chunksize (int, optional): 1000
 
     Yield:
-        Iterator
+        data.Sample
 
     Examples:
-        >>> for i in get_chunk_sample(fname):
-        ...     print(len(list(i)))
-        1000
-        1000
-        1000
-        1000
-        1000
-        23
+        >>> for sample in itertools.islice(get_chunk_sample(fname), 3):
+        ...     print(type(sample))
+        <class 'data.Sample'>
+        <class 'data.Sample'>
+        <class 'data.Sample'>
     """
 
     it = iter(get_sample(fname))
