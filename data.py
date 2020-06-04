@@ -57,6 +57,12 @@ class Sample(BaseModel):
             raise ValueError('Name list format should be: \'["a", "b", ...]\'')
         return ast.literal_eval(s)
 
+    def __str__(self):
+        return F'Sample(news_ID={self.news_ID},' \
+                    F' hyperlink={self.hyperlink},' \
+                    F' content={self.content},' \
+                    F' name={self.name})'
+
 
 def get_sample(fname: str) -> Sample:
     """ Preprocess each row to Sample
