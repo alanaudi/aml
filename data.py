@@ -1,16 +1,14 @@
-#!/usr/bin/env python 
-#-*- coding: utf-8 -*-
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 # Standard import {{{
 import ast
 import csv
 import itertools
-import json
-import os
 import re
 from typing import Iterator, List, Optional
 
 # Third-party import
-from pydantic import BaseModel, Field, validator
+from pydantic import BaseModel, validator
 
 # }}}
 
@@ -28,8 +26,8 @@ class Sample(BaseModel):
     name: Optional[List[str]]
 
     @property
-    def source(cls):
-        return re.search(r'https?://.*?/', cls.hyperlink).group()
+    def source(self):
+        return re.search(r'https?://.*?/', self.hyperlink).group()
 
     @validator('news_ID')
     def str2int(cls, s):
@@ -88,7 +86,7 @@ def get_chunk_sample(fname, chunksize=1000):
     while True:
         chunk_it = itertools.islice(it, chunksize)
         try:
-            first = next(chunk_it)
+            n = next(chunk_it)
         except StopIteration:
             return
-        yield itertools.chain((first,), chunk_it)
+        yield from itertools.chain((n,), chunk_it)
