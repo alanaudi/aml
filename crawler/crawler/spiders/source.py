@@ -130,6 +130,8 @@ if '__main__' == __name__:
     c1 = NewsFactory.get_news_crawler('Cnyes')
     print(type(c1))
     # <class 'type'>
+    print(type(c1()))
+    # <class '__main__.Cnyes'>
     print(c1.name)
     # cnyes
     c2 = interface('Cnyes')
