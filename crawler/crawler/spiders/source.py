@@ -121,6 +121,19 @@ class NewsFactory():
         except AssertionError as _e:
             print(_e)
 
+def interface(classname):
+    run = dict(Cnyes=Cnyes, Udn=Udn, Mirrormedia=Mirrormedia, Chinatimes=Chinatimes, DomesticJudicial=DomesticJudicial)
+    return run[classname]()
+
 
 if '__main__' == __name__:
-    news_crawler = NewsFactory.get_news_crawler('Cnyes')
+    c1 = NewsFactory.get_news_crawler('Cnyes')
+    print(type(c1))
+    # <class 'type'>
+    print(c1.name)
+    # cnyes
+    c2 = interface('Cnyes')
+    print(type(c2))
+    # <class '__main__.Cnyes'>
+    print(c2.name)
+    # cnyes
