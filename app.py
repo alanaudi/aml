@@ -20,6 +20,7 @@ csvfile = DATASET_DIR / os.listdir(DATASET_DIR)[1]
 
 host_name = set([sample.host for sample in get_sample(csvfile)])
 
+print(F'Class Name\thostname\texample')
 for sample in get_sample(csvfile):
     if sample.host in host_name:
         print(F'{sample.source}\t{sample.host}\t{sample.hyperlink}')
