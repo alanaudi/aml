@@ -12,121 +12,34 @@ __all__ = ['Cnyes', 'Udn', 'Mirrormedia', 'Chinatimes', 'DomesticJudicial']
            # 'Nextmag', 'EntLtn', 'Storm', 'HouseEttoday']
 
 
-# 1
-class Cnyes(Spider):
-    name = 'cnyes'
-    allowed_domains = ['news.cnyes.com']
-    start_urls = []
+
+# Dynamic class definition
+class NewsSpider(Spider):
+    def __init__(self, classtype):
+        self._type = classtype
+        self.name = classtype
+        self.allowed_domains = []
+        self.start_urls = []
 
     def parse(self, response):
         pass
 
 
-#2
-class Udn(Spider):
-    name = 'udn'
-    allowed_domains = ['udn.com']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 3
-class Mirrormedia(Spider):
-    name = 'mirrormedia'
-    allowed_domains = ['www.mirrormedia.mg']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 4
-class Chinatimes(Spider):
-    name = 'chinatimes'
-    allowed_domains = ['www.chinatimes.com']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 5
-class DomesticJudicial(Spider):
-    name = 'domestic.judicial'
-    allowed_domains = ['domestic.judicial.gov.tw']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-# 6
-class Coolloud(Spider):
-    name = 'coolloud'
-    allowed_domains = ['www.coolloud.org.tw']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 7
-class Ctee(Spider):
-    name = 'ctee'
-    allowed_domains = ['m.ctee.com.tw']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 8
-class MopsTwse(Spider):
-    name = 'mops.twse'
-    allowed_domains = ['mops.twse.com.tw']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 9
-class Hk01(Spider):
-    name = 'hk01'
-    allowed_domains = ['www.hk01.com']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-# 10
-class Wealth(Spider):
-    name = 'wealth'
-    allowed_domains = ['www.wealth.com.tw']
-    start_urls = []
-
-    def parse(self, response):
-        pass
-
-
-class NewsFactory():
-    @staticmethod
-    def get_news_crawler(template):
-        try:
-            if template in __all__:
-                return eval(template)
-            raise AssertionError(F'{template}() not found')
-        except AssertionError as _e:
-            print(_e)
-
-def interface(classname):
-    run = dict(Cnyes=Cnyes, Udn=Udn, Mirrormedia=Mirrormedia, Chinatimes=Chinatimes, DomesticJudicial=DomesticJudicial)
-    return run[classname]()
-
+def NewsFactory(name, argnames, BaseClass=NewsSpider):
+    def __init__(self, **kwargs):
+        for key, value in kwargs.items():
+            # here, the argnames variable is the one passed to the
+            # ClassFactory call
+            if key not in argnames:
+                raise TypeError("Argument %s not valid for %s"
+                    % (key, self.__class__.__name__))
+            setattr(self, key, value)
+        BaseClass.__init__(self, name)
+    newclass = type(name, (BaseClass,),{"__init__": __init__})
+    return newclass
 
 if '__main__' == __name__:
+    # ----------------------------------------
     c1 = NewsFactory.get_news_crawler('Cnyes')
     print(type(c1))
     # <class 'type'>
@@ -134,8 +47,18 @@ if '__main__' == __name__:
     # <class '__main__.Cnyes'>
     print(c1.name)
     # cnyes
+    # ----------------------------------------
     c2 = interface('Cnyes')
     print(type(c2))
     # <class '__main__.Cnyes'>
     print(c2.name)
     # cnyes
+    # ----------------------------------------
+    # dynamic class definition
+    c3 = ClassFactory('Nextmag', [])
+    print(type(c3))
+    instance = c3()
+    print(instance)
+    print(type(instance))
+    print(instance.allowed_domains)
+    print(instance.name)
