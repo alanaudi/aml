@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from scrapy import Spider
+from scrapy import Spider, Selector
 
 
 __all__ = ['Cnyes', 'Udn', 'Mirrormedia', 'Chinatimes', 'DomesticJudicial']
@@ -12,50 +12,35 @@ __all__ = ['Cnyes', 'Udn', 'Mirrormedia', 'Chinatimes', 'DomesticJudicial']
            # 'Nextmag', 'EntLtn', 'Storm', 'HouseEttoday']
 
 
-
 # Dynamic class definition
 class NewsSpider(Spider):
-    def __init__(self, classtype):
-        self._type = classtype
-        self.name = classtype
-        self.allowed_domains = []
-        self.start_urls = []
+    def __init__(self, name, **kwargs):
+        self._type = name
+        print('set type')
+        self.name = name
+        print('set name')
+        # self.allowed_domains = []
+        # self.start_urls = []
+        print(kwargs)
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def parse(self, response):
-        pass
+        """ Define general pattern """
+        selector = Selector(text=response.text)
+        article = selector.xpath().extract_first()
+        yield article
 
 
-def NewsFactory(name, argnames, BaseClass=NewsSpider):
-    def __init__(self, **kwargs):
-        for key, value in kwargs.items():
-            # here, the argnames variable is the one passed to the
-            # ClassFactory call
-            if key not in argnames:
-                raise TypeError("Argument %s not valid for %s"
-                    % (key, self.__class__.__name__))
-            setattr(self, key, value)
-        BaseClass.__init__(self, name)
-    newclass = type(name, (BaseClass,),{"__init__": __init__})
-    return newclass
+
+def NewsFactory(name, kwargs, BaseClass=NewsSpider):
+    def __init__(self):
+        BaseClass.__init__(self, name, **kwargs)
+    return type(name, (BaseClass,),{"__init__": __init__})
+
 
 if '__main__' == __name__:
-    # ----------------------------------------
-    c1 = NewsFactory.get_news_crawler('Cnyes')
-    print(type(c1))
-    # <class 'type'>
-    print(type(c1()))
-    # <class '__main__.Cnyes'>
-    print(c1.name)
-    # cnyes
-    # ----------------------------------------
-    c2 = interface('Cnyes')
-    print(type(c2))
-    # <class '__main__.Cnyes'>
-    print(c2.name)
-    # cnyes
-    # ----------------------------------------
-    # dynamic class definition
-    c3 = ClassFactory('Nextmag', [])
+    crawler = NewsFactory('Nextmag', [])()
     print(type(c3))
     instance = c3()
     print(instance)
