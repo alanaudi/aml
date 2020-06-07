@@ -31,7 +31,8 @@ class Sample(BaseModel):
 
     @property
     def source(self):
-        return PATTERN.sub(lambda m: REP[re.escape(m.group(0))], self.host).strip('.')
+        s = PATTERN.sub(lambda m: REP[re.escape(m.group(0))], self.host).strip('.')
+        return ''.join(x.capitalize() or '.' for x in s.split('.'))
 
     @property
     def host(self):
@@ -59,9 +60,10 @@ class Sample(BaseModel):
 
     def __str__(self):
         return F'Sample(news_ID={self.news_ID},' \
-                    F' hyperlink={self.hyperlink},' \
-                    F' content={self.content},' \
-                    F' name={self.name})'
+               F' source="{self.source}",' \
+               F' hyperlink="{self.hyperlink}",' \
+               F' content="{self.content}",' \
+               F' name={self.name})' \
 
 
 def get_sample(fname: str) -> Sample:
