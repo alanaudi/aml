@@ -8,3 +8,13 @@ Mirrormedia:
   meta: '#app > div > div.article-container > div.article > div.article_body > main > div.article__basic-info > div'
   figure: 'div.content-image'
   content: '#article-body-content'
+Chinatimes:
+  title: 'h1.article-title'
+  meta: 'div.meta-info'
+  figure: 'div.main-figure > figure'
+  content: 'div.article-body'
+MCtee:
+  title: 'div.entry-title'
+  meta: 'div.post-meta-elements'
+  figure: '#alanaudi'
+  content: 'div.entry-content'
