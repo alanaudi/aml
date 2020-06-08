@@ -113,7 +113,7 @@ def crawl(**kwargs): # {{{
                       'source': sample.source,
                       'hyperlink': sample.hyperlink}
 
-            fname = F'{DATASET_DIR}/{sample.news_ID}.txt'
+            fname = F'{DATASET_DIR}/raw/{source}/{sample.news_ID}.txt'
             try:
                 nc = NewsCrawler(**config)
                 with open(fname, 'w') as f:

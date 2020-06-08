@@ -3,3 +3,8 @@ Cnyes:
   meta: '#content > div > div > div._2hZZ.theme-app.theme-newsdetail > main > div._uo1n > div._1R6L'
   figure: '#content > div > div > div._2hZZ.theme-app.theme-newsdetail > main > div._1S0A > article > figure'
   content: '#content > div > div > div._2hZZ.theme-app.theme-newsdetail > main > div._1S0A > article > section._82F6 > div._1UuP'
+Mirrormedia:
+  title: '#app > div > div.article-container > div.article > div.article_body > main > h1'
+  meta: '#app > div > div.article-container > div.article > div.article_body > main > div.article__basic-info > div'
+  figure: 'div.content-image'
+  content: '#article-body-content'
