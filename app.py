@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Standard import
+import time
 import sys
 import itertools
 import glob
@@ -8,6 +9,7 @@ from pathlib import Path
 import re
 import traceback
 import yaml
+import threading
 
 # Third-party import
 import pandas as pd
@@ -18,29 +20,48 @@ from easydict import EasyDict
 # Local import
 from data import Sample, get_sample
 from crawler import NewsCrawler
+from color import Color
 
 # GLOBAL
 ROOT = Path(os.getcwd())
 DATASET_DIR = ROOT / 'dataset'
 DOC_DIR = ROOT / 'doc'
+LOG_DIR = ROOT / 'log'
+RAWDATA_DIR = ROOT / 'dataset' / 'raw'
 
 # csv dataset
-csvfile = DATASET_DIR / glob.glob(F'{str(DATASET_DIR)}/*.csv')[0]
+CSVFILE = DATASET_DIR / glob.glob(F'{str(DATASET_DIR)}/*.csv')[0]
 
 # create simplified name, host name, hyperlink
-host_name = set([sample.host for sample in get_sample(csvfile)])
+HOSTNAME = set([sample.host for sample in get_sample(CSVFILE)])
 
+# global var
+global done, status, msg
 
-def get_selector():
+def get_selector(): # {{{
     with open('selector.yaml', 'r') as f:
         return yaml.load(f)
+    # }}}
 
-# patch = [1982,1983,1997, 2002, 2010, 2015, 2019, 2028, 2035, 2059, 2079, 2083, 2134, 2138, 2151, 2156, 2170]
+def animate(): # {{{
+    global done, status, msg
+    # loading_string = ['|', '/', '-', '\\']
+    loading_string = [' =====', '= ====', '== ===', '=== ==', '==== =', '===== ', '==== =', '=== ==', '== ===', '= ====']
+    for c in itertools.cycle(loading_string):
+        if done:
+            break
+        sys.stdout.write(F'\r{msg[0]} {c}')
+        sys.stdout.flush()
+        time.sleep(0.1)
+    sys.stdout.flush()
+    _color = Color.GREEN if status is True else Color.RED
+    _status = 'Done' if status is True else 'Failed'
+    sys.stdout.write(F'\r{msg[0]} {msg[1]} {_color}{_status}{Color.ENDC}    \n')
+    # }}}
 
-
-# Global settings {{{
+# Global command config {{{
 _global_options = [
-    click.option('-s', '--source', 'source', default='Cnyes', help='Source name from 39 news source'),
+        click.option('-s', '--source', 'source', default='Cnyes', help='Source name from 39 news source (default: \'Cnyes\')'),
 ]
 
 def global_options(func):
@@ -54,36 +75,91 @@ def global_options(func):
 def main(**kwargs):
     pass
 
+
 @main.command()
 @global_options
 def crawl(**kwargs): # {{{
+    """Crawl dataset news article
+    """
     # Print argument, parameter, option {{{
     print(tabulate(list(kwargs.items()), headers=['Name', 'Value'], tablefmt='orgtbl'))
+    print('\n')
     args = EasyDict(kwargs)
     # }}}
 
-    for sample in get_sample(csvfile):
-        if sample.source == 'Cnyes' and sample.news_ID == 231:
-            config = {'selector': get_selector()[sample.source],
+    # loading config
+    global done, status, msg
+
+    dataset = list(get_sample(CSVFILE))
+    sources = [args.source] if args.source != 'total' else set([s.source for s in dataset])
+    selectors = get_selector()
+
+    for source in sources:
+        data = list(filter(lambda x: x.source == source, dataset))
+
+        done = False
+        status = None
+        count = 0
+        total = len(data)
+
+        msg = [source]
+
+        t = threading.Thread(target=animate)
+        t.start()
+
+        fo = open(F'{LOG_DIR}/{source}.log', 'a+')
+        for sample in data:
+            config = {'selector': selectors[sample.source],
                       'source': sample.source,
                       'hyperlink': sample.hyperlink}
+
             fname = F'{DATASET_DIR}/{sample.news_ID}.txt'
             try:
                 nc = NewsCrawler(**config)
                 with open(fname, 'w') as f:
                     f.write(F'hyperlink: {nc.hyperlink}\n\n')
                     f.write(nc.article)
-                    print(F'{fname}')
+                count += 1
             except Exception as e:
                 _type = e.__class__.__name__
                 _detail = e.args[0]
-                print(F'{sample.news_ID}')
+                fo.write(F'{sample.news_ID}\n')
                 cl, exc, tb = sys.exc_info()
                 last_call_stack = traceback.extract_tb(tb)[-1]
                 _fname = last_call_stack[0]
                 _line = last_call_stack[1]
                 _func_name = last_call_stack[2]
-                print(F'{_fname}: line {_line}, def {_func_name}() -> {_type}, {_detail}')
+                fo.write(F'{_fname}: line {_line}, def {_func_name}() -> {_type}, {_detail}\n')
+
+
+        msg.append(F'({count}/{len(data)})')
+        status = True if len(data) == count else False
+        done = True
+
+    #
+    # for source in source
+    # for sample in get_sample(csvfile):
+    #     if sample.source == 'Cnyes' and sample.news_ID == 231:
+    #         config = {'selector': get_selector()[sample.source],
+    #                   'source': sample.source,
+    #                   'hyperlink': sample.hyperlink}
+    #         fname = F'{DATASET_DIR}/{sample.news_ID}.txt'
+    #         try:
+    #             nc = NewsCrawler(**config)
+    #             with open(fname, 'w') as f:
+    #                 f.write(F'hyperlink: {nc.hyperlink}\n\n')
+    #                 f.write(nc.article)
+    #                 print(F'{fname}')
+    #         except Exception as e:
+    #             _type = e.__class__.__name__
+    #             _detail = e.args[0]
+    #             print(F'{sample.news_ID}')
+    #             cl, exc, tb = sys.exc_info()
+    #             last_call_stack = traceback.extract_tb(tb)[-1]
+    #             _fname = last_call_stack[0]
+    #             _line = last_call_stack[1]
+    #             _func_name = last_call_stack[2]
+    #             print(F'{_fname}: line {_line}, def {_func_name}() -> {_type}, {_detail}')
     # }}}
 
 
@@ -98,6 +174,7 @@ def info(**kwargs): # {{{
     """
     # Print argument, parameter, option {{{
     print(tabulate(list(kwargs.items()), headers=['Name', 'Value'], tablefmt='orgtbl'))
+    print('\n')
     args = EasyDict(kwargs)
     # }}}
     # create source infomation
@@ -112,7 +189,6 @@ def info(**kwargs): # {{{
     for e in sorted(sort, key=lambda x: x.split('\t')[1]):
         print(e)
     # }}}
-
 
 if '__main__' == __name__:
     main()
