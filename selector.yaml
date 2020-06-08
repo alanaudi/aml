@@ -16,5 +16,5 @@ Chinatimes:
 MCtee:
   title: 'div.entry-title'
   meta: 'div.post-meta-elements'
-  figure: '#alanaudi'
+  figure: '#NotImplimentationError'
   content: 'div.entry-content'
