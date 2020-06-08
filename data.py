@@ -12,7 +12,7 @@ from pydantic import BaseModel, validator
 
 # }}}
 
-REPLACEMENT = ['www', 'com', 'tw', 'mg', 'gov', 'net', 'org', 'm', 'hk', 'news']
+REPLACEMENT = ['www', 'com', 'tw', 'mg', 'gov', 'net', 'org', 'hk', 'news']
 PATTERN = re.compile('|'.join([r'\b%s\b' % s for s in REPLACEMENT]))
 REP = {k:'' for k in REPLACEMENT}
 
