@@ -1,0 +1,20 @@
+#! no response
+Ltn:
+  title: 'div.content > section.content940 > div > h1'
+  meta: 'div.content > section > div.text.boxTitle.boxText > span'
+  figure: 'div.photo.boxTitle > p'
+  content: 'div.text.boxTitle.boxText > p'
+
+#! is_news = False
+MopsTwse:
+  title: ''
+  meta: ''
+  figure: ''
+  content: ''
+
+#! ajax, connot get target elemenf
+Technews:
+  title: 'div#content-container > div.title-meta.no-margin > h3.post-title'
+  meta: 'div#content-container > div.title-meta.no-margin > h5.date'
+  figure: '#NotImplimentationError'
+  content: 'div#content-container > div.post-content.no-margin'
