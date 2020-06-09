@@ -18,3 +18,18 @@ MCtee:
   meta: 'div.post-meta-elements'
   figure: '#NotImplimentationError'
   content: 'div.entry-content'
+Udn:
+  title: 'h1.article-content__title'
+  meta: 'div.article-content__subinfo'
+  figure: 'figcaption'
+  content: 'article.article-content > div > section.article-content__editor'
+Mingpao:
+  title: 'div#blockcontent > hgroup > h1'
+  meta: 'div#blockcontent > div > div > div.date'
+  figure: 'div.slide_cap1.color_white.txt1'
+  content: 'article.txt4'
+Businesstoday:
+  title: 'div.article > section > div > h1'
+  meta: 'div.article__main > div > div.context__titlebox'
+  figure: '#NotImplimentationError'
+  content: 'div.article__main > div > div[itemprop="articleBody"]'

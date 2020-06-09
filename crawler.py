@@ -23,6 +23,8 @@ class NewsCrawler(BaseModel):
     def article(self):
         res = requests.get(self.hyperlink)
         root = BS(res.text, 'html.parser')
+        with open('test.html', 'w') as f:
+            f.write(res.text)
         title = root.select(self.selector['title'])[0].text
         meta = root.select(self.selector['meta'])[0].text
         figure = ''.join([x.text for x in root.select(self.selector['figure'])])

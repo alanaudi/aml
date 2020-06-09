@@ -36,7 +36,7 @@ CSVFILE = DATASET_DIR / glob.glob(F'{str(DATASET_DIR)}/*.csv')[0]
 HOSTNAME = set([sample.host for sample in get_sample(CSVFILE)])
 
 # global var
-global done, status, msg
+global done, status, msg, process
 
 def get_selector(): # {{{
     with open('selector.yaml', 'r') as f:
@@ -44,13 +44,13 @@ def get_selector(): # {{{
     # }}}
 
 def animate(): # {{{
-    global done, status, msg
+    global done, status, msg, process
     # loading_string = ['|', '/', '-', '\\']
     loading_string = [' =====', '= ====', '== ===', '=== ==', '==== =', '===== ', '==== =', '=== ==', '== ===', '= ====']
     for c in itertools.cycle(loading_string):
         if done:
             break
-        sys.stdout.write(F'\r{msg[0]} {c}')
+        sys.stdout.write(F'\r{msg[0]} {process} {c}')
         sys.stdout.flush()
         time.sleep(0.1)
     sys.stdout.flush()
@@ -78,6 +78,7 @@ def main(**kwargs):
 
 @main.command()
 @global_options
+@click.option('-l', 'len', default=None, help='Num of test sample')
 def crawl(**kwargs): # {{{
     """Crawl dataset news article
     """
@@ -88,7 +89,7 @@ def crawl(**kwargs): # {{{
     # }}}
 
     # loading config
-    global done, status, msg
+    global done, status, msg, process
 
     dataset = list(get_sample(CSVFILE))
     sources = [args.source] if args.source != 'total' else set([s.source for s in dataset])
@@ -101,14 +102,16 @@ def crawl(**kwargs): # {{{
         status = None
         count = 0
         total = len(data)
-
+        process = F'(0 / {total})'
         msg = [source]
 
         t = threading.Thread(target=animate)
         t.start()
 
+        end = int(args.len) if args.len != 'None' else None
         fo = open(F'{LOG_DIR}/{source}.log', 'a+')
-        for sample in data:
+        for idx, sample in enumerate(data[:end]):
+            process = F'({idx+1}/{total})'
             config = {'selector': selectors[sample.source],
                       'source': sample.source,
                       'hyperlink': sample.hyperlink}
