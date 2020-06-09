@@ -18,3 +18,7 @@ Technews:
   meta: 'div#content-container > div.title-meta.no-margin > h5.date'
   figure: '#NotImplimentationError'
   content: 'div#content-container > div.post-content.no-margin'
+
+#! Ettoday 有兩種版型
+#  https://www.ettoday.net/amp/amp_news.php
+#  https://www.ettoday.net/news/20191106/1573231.htm
