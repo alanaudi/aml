@@ -33,3 +33,9 @@ Businesstoday:
   meta: 'div.article__main > div > div.context__titlebox'
   figure: '#NotImplimentationError'
   content: 'div.article__main > div > div[itemprop="articleBody"]'
+Hk01:
+  title: 'h1#articleTitle'
+  subtitle: 'div.wa4tvz-0.Kkdae.sc-bdVaJa.czkujZ'
+  meta: 'article.sc-bwzfXH.liBCIH.sc-bdVaJa.iMCZeY > div.sc-bdVaJa.jLaXBp > address'
+  figure: 'div.sc-bdVaJa.hVSRSV > div.sc-bdVaJa iHZvIS > p.e8xwya-0.hcByuh.sc-gqjmRU.hrgbln'
+  content: 'p.s1v3m5dk-0.dnFOkZ.sc-gqjmRU.gBjLGB'

@@ -28,7 +28,7 @@ class NewsCrawler(BaseModel):
         title = root.select(self.selector['title'])[0].text
         meta = root.select(self.selector['meta'])[0].text
         figure = ''.join([x.text for x in root.select(self.selector['figure'])])
-        content = root.select(self.selector['content'])[0].text
+        content = ''.join([x.text for x in root.select(self.selector['content'])])
         return F'{title}\n\n{meta}\n\n{figure}\n\n{content}'
 
 
